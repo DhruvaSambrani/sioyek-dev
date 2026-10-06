@@ -1,5 +1,5 @@
 pkgname=sioyek-dev
-pkgver=2.0.0.r1107.gfa4cd23
+pkgver=2.0.0.r1162.ga539d494
 pkgrel=1
 pkgdesc="PDF viewer for research papers (development branch, bundled MuPDF)"
 arch=('x86_64')
@@ -12,10 +12,10 @@ depends=(
     'qt6-declarative'
     'qt6-svg'
     'qt6-speech'
+    'qt6-wayland'
     'zlib'
 )
 makedepends=('git' 'unzip')
-optdepends=('qt6-wayland: Native Wayland (currently broken, uses XWayland by default)')
 provides=('sioyek')
 conflicts=('sioyek' 'sioyek-git')
 source=("git+https://github.com/ahrm/sioyek.git#branch=development")
@@ -44,19 +44,14 @@ build() {
 package() {
     cd sioyek
 
-    install -Dm755 sioyek "$pkgdir/usr/lib/sioyek/sioyek"
-    install -Dm755 /dev/stdin "$pkgdir/usr/bin/sioyek" << 'END'
-#!/bin/sh
-[ -n "$WAYLAND_DISPLAY" ] && export QT_QPA_PLATFORM=xcb
-exec /usr/lib/sioyek/sioyek "$@"
-END
+    install -Dm755 sioyek -t "$pkgdir/usr/bin/"
     install -Dm644 LICENSE -t "$pkgdir/usr/share/licenses/$pkgname/"
     install -Dm644 resources/sioyek-icon-linux.png "$pkgdir/usr/share/pixmaps/sioyek-icon-linux.png"
     install -Dm644 resources/sioyek.desktop -t "$pkgdir/usr/share/applications/"
     install -dm755 "$pkgdir/usr/share/sioyek/shaders"
     cp -r pdf_viewer/shaders/* "$pkgdir/usr/share/sioyek/shaders/"
-    install -Dm644 pdf_viewer/keys.config -t "$pkgdir/etc/sioyek/"
-    install -Dm644 pdf_viewer/prefs.config -t "$pkgdir/etc/sioyek/"
+    install -Dm644 pdf_viewer/keys.config -t "$pkgdir/usr/share/sioyek/"
+    install -Dm644 pdf_viewer/prefs.config -t "$pkgdir/usr/share/sioyek/"
     install -Dm644 resources/sioyek.1 -t "$pkgdir/usr/share/man/man1/"
     install -Dm644 tutorial.pdf -t "$pkgdir/usr/share/sioyek/"
 }
