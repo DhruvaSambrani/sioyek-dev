@@ -36,8 +36,8 @@ Copy `/usr/share/applications/sioyek.desktop` to `$XDG_DATA_HOME/applications/`.
 Set `Exec` under `[Desktop Entry]`:
 
 ```ini
-Exec=env QT_QPA_PLATFORM=wayland sioyek %f
+Exec=sioyek-wayland %f
 ```
 
 If you [have problems with Wayland](https://github.com/ahrm/sioyek/issues/1660),
-replace `wayland` with `xcb` for XWayland.
+use `sioyek` for XWayland.
